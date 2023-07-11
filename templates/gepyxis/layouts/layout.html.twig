@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="Content-Language" content="es">
+
+{% if product is defined and product is not null %}
+<meta name="description" content='{{ product.getShortDescription() }}'>
+{% endif %}
+
+
+
+<!-- Favicons -->
+<link href="assets/img/icono.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+
+  {% apply spaceless %}
+    {# add global stylesheets and scripts outside of any blocsk to add them to the helpers before any others assets are added #}
+    {# we use the view helper to have cache buster functionality #}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/animate.css/animate.min.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/aos/aos.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap/css/bootstrap.min.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap-icons/bootstrap-icons.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/boxicons/css/boxicons.min.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/glightbox/css/glightbox.min.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/swiper/swiper-bundle.min.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('assets/css/style.css')) %}
+    {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Hind+Guntur:300,400,500,600,700&display=swap') %}
+    {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.9.0/css/all.css') %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/lib/magnific/magnific.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/lib/autocompletejs/css/autoComplete.css'), 'screen') %}
+    {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.7.0/css/all.css',null,null,{integrity:'sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ',crossorigin:'anonymous'}) %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/css/global.css')) %}
+    {% if editmode %}
+        {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+    {% endif %}
+    {% do pimcore_head_script().appendFile('https://code.jquery.com/jquery-3.3.1.slim.min.js',null,null,{ integrity:"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",crossorigin:"anonymous"}) %}
+    {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',null,null,{ integrity:"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1",crossorigin:"anonymous"}) %}
+    {% do pimcore_head_script().appendFile(asset('static/lib/magnific/magnific.js')) %}
+    {% do pimcore_head_script().appendFile(asset('static/lib/autocompletejs/js/autoComplete.min.js')) %}
+    {% do pimcore_head_script().appendFile(asset('static/js/search-autocomplete.js')) %}
+    {% do pimcore_head_script().appendFile(asset('static/js/main.js')) %}
+
+    <style>
+        .whatsapp {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 9999;
+        background-color: green;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+            
+    {% if not editmode %}
+            {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+    {% endif %}
+
+    {% if not document is defined or not document %}
+        {% set document = pimcore_document(1) %}
+    {% endif %}
+
+    {% if document is instanceof('\\Pimcore\\Model\\Document\\Link') %}
+        {# @var document \Pimcore\Model\Document\Link #}
+        {% set document = document.getObject() %}
+    {% endif %}
+
+    {% if document is instanceof('\\Pimcore\\Model\\Document\\Page') %}
+        {% if document.getTitle() is not empty %}
+            {% do pimcore_head_title().set(document.getTitle()) %}
+        {% endif %}
+
+        {% if document.getDescription() is not empty %}
+            {% do pimcore_head_meta().setDescription(document.getDescription()) %}
+        {% endif %}
+
+        {% do pimcore_head_title().append('Gepyxis') %}
+        {% do pimcore_head_title().setSeparator(' - ') %}
+    {% endif %}
+
+    {% set isPortal = ((isPortal is defined) and isPortal) %}
+{% endapply %}
+
+{# we're using the deferred extension here to make sure this block is rendered after all helper calls #}
+{% block layout_head_meta deferred %}
+    {{ pimcore_head_title() }}
+    {{ pimcore_head_meta() }}
+
+    {% if pimcore_placeholder('canonical').count() %}
+        <link rel="canonical" href="{{ pimcore_placeholder('canonical') }}"/>
+    {% endif %}
+
+{% endblock %}
+
+{% block head_stylesheets deferred %}
+    {{ pimcore_head_link() }}
+{% endblock %}
+
+{% if product is defined and product is not null %}
+
+  <!-- ======= Etiquetas Open Graphic ======= -->
+    <meta property="og:title" content={{ product.oSName }}>
+    <meta property="og:type" content="product">
+    <meta property="og:description" content='{{ product.getShortDescription() }}'>
+    {% if product.getOgImage()  %}
+    <meta property="og:image" content={{ product.getOgImage() }}>
+    {% else %} 
+    <meta property="og:image" content={{ product.getLogo() }}>
+    {% endif %}
+
+{% endif %}
+
+</head>
+
+<body>
+
+{% include "gepyxis/includes/header.html.twig" %}
+
+{{ pimcore_inc(document.getProperty('hero-carouselGP')) }}
+
+
+            <main role="main">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+
+            {% if isPortal %}
+                {{ block('content') }}
+            {% else %}
+            <section>
+                <div id="content" class="container">
+                    <div class="row">
+                        {% set leftNavShow = document.getProperty('left_nav_show') %}
+                        {% set showBreadcrumbs = (hideBreadcrumbs is defined) ? not hideBreadcrumbs : true %}
+                        {% set mainColClass = leftNavShow ? 'col-md-9 pt-3 pt-md-5 order-last' : 'col-md-12 pt-3 pt-md-5' %}
+
+                        <div class="{{ mainColClass }}">
+                            {% if showBreadcrumbs %}
+                                {% set mainNavStartNode = document.getProperty('navigation_root') %}
+                                {% if mainNavStartNode is empty %}
+                                    {% set mainNavStartNode = pimcore_document(1) %}
+                                {% endif %}
+
+                                {% set breadbrumbs = pimcore_build_nav({
+                                    active: document,
+                                    root: mainNavStartNode
+                                }) %}
+                                {% do app_navigation_enrich_breadcrumbs(breadbrumbs) %}
+                                {% do pimcore_nav_renderer('breadcrumbs').setMinDepth(null) %}
+
+                                <div class="breadcrumb-header">
+                                    <a href="/Inicio">{{ 'Inicio' }}</a> &gt;
+                                    {{ pimcore_render_nav(breadbrumbs, 'breadcrumbs') }}
+                                </div>
+                            {% endif %}
+                            {{ block('content') }}
+                        </div>
+
+                        {% if leftNavShow %}
+                            <div class="col-md-3 pt-3 pt-md-5 order-first sidebar">
+                                <div class="sticky">
+                                    <div class="bs-sidebar hidden-print affix-top" role="complementary">
+                                        {% set leftStartNode = document.getProperty('left_nav_start_node') %}
+                                        {% if leftStartNode is empty %}
+                                            {% set leftStartNode = mainNavStartNode %}
+                                        {% endif %}
+
+                                        {% set leftNav = pimcore_build_nav({
+                                            active: document,
+                                            root: leftStartNode
+                                        }) %}
+
+                                        <h5>{{ leftStartNode.getProperty('navigation_name') }}</h5>
+
+                                        {{ pimcore_render_nav(leftNav, 'menu', 'renderMenu', {
+                                            ulClass: 'nav bs-sidenav',
+                                            expandSiblingNodesOfActiveBranch: true,
+                                        }) }}
+                                    </div>
+                                    {{ pimcore_inc(document.getProperty('sidebar')) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+            <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Click to return on the top" data-toggle="tooltip" data-placement="left">
+                <span class="fa fa-arrow-up"></span>
+            </a>
+            <div class="whatsapp-button">
+                <a href="https://api.whatsapp.com/send?phone=525522793490" target="_blank" rel="noopener" class="whatsapp">
+                    <i class="fab fa-whatsapp fa-2x"></i>
+                </a>
+            </div>
+
+        </main>
+
+
+
+        {# include a document-snippet - in this case the footer document #}
+        {{ pimcore_inc(document.getProperty('footerGP')) }}
+
+        {# output scripts added before #}
+        {% block headscripts deferred %}
+            {{ pimcore_head_script() }}
+        {% endblock %}
+
+
+        {% block inlinescripts deferred %}
+            {{ pimcore_inline_script() }}
+        {% endblock %}
+
+<!-- Vendor JS Files -->
+{% do pimcore_head_script().appendFile(asset('assets/vendor/purecounter/purecounter_vanilla.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/vendor/aos/aos.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/vendor/glightbox/js/glightbox.min.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/vendor/isotope-layout/isotope.pkgd.min.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/vendor/swiper/swiper-bundle.min.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/vendor/waypoints/noframework.waypoints.js')) %}
+{% do pimcore_head_script().appendFile(asset('assets/js/main.js')) %}
+
+{% block scripts %}{% endblock %}
+
+</body>
+
+</html>

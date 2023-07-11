@@ -1,0 +1,40 @@
+{% extends 'gepyxis/layouts/layout.html.twig' %}
+
+{% block content %}
+    <div id="main-content" class="main-content" >
+        <!-- ======= Our Projects Section ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>{{ pimcore_input("head_pro_nam", {'placeholder':'Título'}).render()|raw }}</h2>
+          <ol>
+            <li><a href="#">Soluciones</a></li>
+            <li><a href="#">Servicios</a></li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Our Projects Section -->
+    
+    <!-- ======= Search Bar Section ======= -->
+    {# {{ pimcore_inc(document.getProperty('swiper')) }}
+    {{include('snippets/search-bar.html.twig') }} #}
+
+    <!-- ======= Swiper Section ======= -->
+    {# <section class="services" data-aos="fade-up">
+      <div class="container">
+        <div class="row">
+          include a document-snippet - in this case the swiper document
+          {{ pimcore_inc(document.getProperty('swiper')) }}
+          {{include('includes/swiper.html.twig') }}
+        </div>
+      </div>
+    </section><!-- End Swiper Section --> #}
+    
+    <!-- ======= Projects Section ======= -->
+    {# {{include('snippets/services-project.html.twig') }} #}
+
+    {{ block('content') }}
+    </div>
+{% endblock %}

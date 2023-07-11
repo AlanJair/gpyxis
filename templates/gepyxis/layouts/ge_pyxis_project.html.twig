@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+    <link href="assets/img/icono.png" rel="icon">
+  
+  <!-- Google Fonts -->
+  {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,700,700i&display=swap') %}
+  {% do pimcore_head_link().appendStylesheet('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') %}
+
+  <!-- Vendor CSS Files -->
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/animate.css/animate.min.css')) %}
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/bootstrap/css/bootstrap.min.css')) %}
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/aos/aos.css')) %}
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/bootstrap-icons/bootstrap-icons.css')) %}
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/boxicons/css/boxicons.min.css')) %}
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/glightbox/css/glightbox.min.css')) %}
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/swiper/swiper-bundle.min.css')) %}
+  {% if editmode %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+  {% endif %}
+  
+  <link rel="stylesheet" href="rss/css/linearicons.css">
+  <link rel="stylesheet" href="rss/css/font-awesome.min.css">
+  <link rel="stylesheet" href="rss/css/bootstrap.css">
+  <link rel="stylesheet" href="rss/css/magnific-popup.css">
+  <link rel="stylesheet" href="rss/css/nice-select.css">					
+  <link rel="stylesheet" href="rss/css/animate.min.css">
+  <link rel="stylesheet" href="rss/css/owl.carousel.css">
+  <link rel="stylesheet" href="rss/css/main.css">
+
+  <!-- Template Main CSS File -->
+  {% do pimcore_head_link().appendStylesheet(asset('static/assets/css/style.css')) %}
+  {{ pimcore_head_link() }}
+  
+  {% do pimcore_head_title().set(project.titulo|striptags) %}
+  {{ pimcore_head_title() }}
+  <style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
+    body{
+    background-color:#fff;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    }
+
+    .height{
+    height: 100vh;
+    }
+
+    .app-button{
+
+    width: 240px;
+    height: 58px;
+    border-radius: 10px;
+    }
+
+    .app-button span{
+
+    font-size: 18px;
+    }
+
+    .buttons{
+
+    display: grid;
+    }
+  </style>
+
+  <!-- =======================================================
+  * Template Name: Moderna - v4.11.0
+  * Template URL: https://bootstrapmade.com/free-bootstrap-template-corporate-moderna/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  {% include "gepyxis/includes/header.html.twig" %}
+  <!-- End Header -->
+
+  <main id="main">
+    <!-- ======= Our Services Section ======= -->
+    {% include "gepyxis/includes/breadcrumbs.html.twig" %}
+    <!-- End Our Projects Section -->
+    <br>
+
+    {{ block('content') }}
+
+  </main><!-- End #main -->
+
+  {# {{ pimcore_inc(document.getProperty('footerGP')) }} #}
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Enlaces útiles</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a class="active" href="{{pimcore_document(204)}}">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a class="" href="{{pimcore_document(206)}}">Proyectos</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{{pimcore_document(210)}}">Nosotros</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{{pimcore_document(215)}}">Aviso de Privacidad</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Nuestros servicios</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">DBA</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Desarrollo de apps</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Seguridad de Datos</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Desarrollo de Software</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contáctanos</h4>
+            <p>
+              <strong>Telefono:</strong>  +52 (55) 5112 7794<br>
+              <strong>Correo:</strong> informacion@gepyxis.mx<br>
+            </p>
+
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-info">
+            <h3>Ge Pyxis</h3>
+            <p>Síguenos en nuestras redes sociales</p>
+            <div class="social-links mt-3">
+              <a href="https://twitter.com/gepyxis" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="https://www.facebook.com/Ge-Pyxis-313151499120781" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="https://www.instagram.com/gepyxis/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://mx.linkedin.com/company/gpy22012208" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy;2023 <strong><span>Ge Pyxis</span></strong>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/purecounter/purecounter_vanilla.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/aos/aos.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/glightbox/js/glightbox.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/isotope-layout/isotope.pkgd.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/swiper/swiper-bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/waypoints/noframework.waypoints.js')) %}
+  {% do pimcore_head_script().appendFile(asset('static/assets/vendor/php-email-form/validate.js')) %}
+  {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js') %}
+
+  <script src="rss/js/vendor/jquery-2.2.4.min.js"></script>
+  {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js',null,null,{ integrity:"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q",crossorigin:"anonymous"}) %}
+  {% do pimcore_head_script().appendFile('https://code.jquery.com/jquery-3.3.1.slim.min.js',null,null,{ integrity:"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",crossorigin:"anonymous"}) %}
+  <script src="rss/js/vendor/bootstrap.min.js"></script>			
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+  <script src="rss/js/easing.min.js"></script>			
+  <script src="rss/js/hoverIntent.js"></script>
+  <script src="rss/js/superfish.min.js"></script>	
+  <script src="rss/js/jquery.ajaxchimp.min.js"></script>
+  <script src="rss/js/jquery.magnific-popup.min.js"></script>	
+  <script src="rss/js/owl.carousel.min.js"></script>			
+  <script src="rss/js/jquery.sticky.js"></script>
+  <script src="rss/js/jquery.nice-select.min.js"></script>			
+  <script src="rss/js/parallax.min.js"></script>		
+  <script src="rss/js/mail-script.js"></script>	
+  <script src="rss/js/main.js"></script>	
+  <!-- Template Main JS File -->
+  {% do pimcore_head_script().appendFile(asset('static/assets/js/main.js')) %}
+  {% if not editmode %}
+    {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+  {% endif %}
+  {{ pimcore_head_script() }}
+</body>
+
+</html>

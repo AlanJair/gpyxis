@@ -1,0 +1,70 @@
+  <!-- ======= Hero Section ======= -->
+
+{% set carouselSlides = pimcore_select('carouselSlides', {
+    width: 70,
+    reload: true,
+    store: [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+    class: 'align-middle'
+}) %}
+{% set count = carouselSlides.getData() %}
+{% if count is empty or count == 0 %}
+    {% set count = 1 %}
+{% endif %}
+<section id="heroCarousel" class="carousel slide" data-ride="carousel" {{ editmode ? 'data-interval="false"' }}>
+    {% if count > 1 %}
+        <ol class="carousel-indicators">
+            {% for j in 0..(count - 1) %}
+                <li data-target="#heroCarousel" data-slide-to="{{ j }}" class="{{ j == 0 ? 'active':'' }}"></li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    <div class="carousel-inner">
+        {% for i in 0..(count - 1) %}
+        <div class="carousel-item position-relative {{ 'heroCarousel-' ~ i }} {{ loop.first ? 'active' }}">
+            {% set cImage = pimcore_image('cImage_' ~ i, {
+                thumbnail: 'portalCarousel',
+                hidetext: true,
+                title: 'Arrastra imagen aquí',
+                imgAttributes: {class: 'd-block w-100'},
+                dropClass: 'portal-slide-' ~ (i + 1)
+            }) %}
+
+            {{ cImage|raw }}
+            <div class="carousel-caption d-block">
+                {% if(i == 0) %}
+                    <h1>{{ pimcore_input('cHeadline_' ~ i,{'placeholder':'Título'}) }}</h1>
+                {% else %}
+                    <div class="display-1">{{ pimcore_input('cHeadline_' ~ i,{'placeholder':'Título'}) }}</div>
+                {% endif %}
+
+                <p class="hero-text">{{ pimcore_textarea('cText_' ~ i,{'placeholder':'Descripción'}) }}</p>
+                <p>{% set cLink = pimcore_link('cLink_' ~ i, {
+                        'class': 'btn btn-lg btn-primary'
+                    }) %}
+                    {{ cLink|raw }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if count > 1 %}
+        <a class="carousel-control carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Anterior</span>
+        </a>
+        <a class="carousel-control carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Siguiente</span>
+        </a>
+    {% endif %}
+    {% if editmode %}
+
+        <div class="container pt-2 pb-5">
+            <span class="editmode-label align-middle d-inline-block">Cantidad de diapositivas:</span> {{ carouselSlides|raw }}
+        </div>
+
+    {% endif %}
+</section>
+
+ <!-- End Hero -->

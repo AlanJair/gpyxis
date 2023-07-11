@@ -1,0 +1,31 @@
+{% extends 'gepyxis/layouts/ge_pyxis_about.html.twig' %}
+
+{% block content %}
+
+    <div class="breadcrumb-area" data-aos="fade-up">
+        <!-- Top Breadcrumb Area -->
+        <div class="breadcrumb-area">
+            <h2 style="color:#FF8000; font-family:Tahoma; text-align:center; size: 25px;">{{ pimcore_input("our_customers", {'placeholder':'Título del carrusel'}).render()|raw }}</h2>
+            <!-- Top Breadcrumb Area -->
+            <div class="top-breadcrumb-area bg-img bg-overlay align-items-center justify-content-center">
+
+              {# Code Carousel #}
+              {{ include('gepyxis/includes/customer-carousel.html.twig') }}
+            </div>
+        </div>
+    </div><br><br>
+
+    <div class="breadcrumb-area" data-aos="fade-up">
+        <!-- Top Breadcrumb Area -->
+        <div class="breadcrumb-area">
+            <h2 style="color:#FF8000; font-family:Tahoma; text-align:center; size: 25px;">{{ pimcore_input("our_partners", {'placeholder':'Título del carrusel'}).render()|raw }}</h2>
+            <!-- Top Breadcrumb Area -->
+            <div class="top-breadcrumb-area bg-img bg-overlay align-items-center justify-content-center">
+
+              {# Code Carousel #}
+              {{ include('gepyxis/includes/partners-carousel.html.twig') }}
+            </div>
+        </div>
+    </div><br><br>
+
+{% endblock %}

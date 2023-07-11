@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <!-- Favicons -->
+  <link href="assets/img/icono.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+
+  {% apply spaceless %}
+      {# add global stylesheets and scripts outside of any blocsk to add them to the helpers before any others assets are added #}
+      {# we use the view helper to have cache buster functionality #}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/animate.css/animate.min.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/aos/aos.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap/css/bootstrap.min.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap-icons/bootstrap-icons.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/boxicons/css/boxicons.min.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/glightbox/css/glightbox.min.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/swiper/swiper-bundle.min.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('assets/css/style.css')) %}
+      {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Hind+Guntur:300,400,500,600,700&display=swap') %}
+      {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.9.0/css/all.css') %}
+      {% do pimcore_head_link().appendStylesheet(asset('static/lib/magnific/magnific.css'), 'screen') %}
+      {% do pimcore_head_link().appendStylesheet(asset('static/css/global.css')) %}
+      {% if editmode %}
+          {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+      {% endif %}
+      {% do pimcore_head_script().appendFile('https://code.jquery.com/jquery-3.3.1.slim.min.js',null,null,{ integrity:"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",crossorigin:"anonymous"}) %}
+      {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',null,null,{ integrity:"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1",crossorigin:"anonymous"}) %}
+      {% do pimcore_head_script().appendFile(asset('static/lib/magnific/magnific.js')) %}
+      {% do pimcore_head_script().appendFile(asset('static/js/main.js')) %}
+      <style>
+        .whatsapp {
+          position: fixed;
+          bottom: 20px;
+          left: 20px;
+          z-index: 9999;
+          background-color: green;
+          color: white;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-decoration: none;
+          box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+        }
+      </style>
+    
+            
+      {% if not editmode %}
+              {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+      {% endif %}
+
+      {% if not document is defined or not document %}
+          {% set document = pimcore_document(1) %}
+      {% endif %}
+
+      {% if document is instanceof('\\Pimcore\\Model\\Document\\Link') %}
+          {# @var document \Pimcore\Model\Document\Link #}
+          {% set document = document.getObject() %}
+      {% endif %}
+
+      {% if document is instanceof('\\Pimcore\\Model\\Document\\Page') %}
+          {% if document.getTitle() is not empty %}
+              {% do pimcore_head_title().set(document.getTitle()) %}
+          {% endif %}
+
+          {% if document.getDescription() is not empty %}
+              {% do pimcore_head_meta().setDescription(document.getDescription()) %}
+          {% endif %}
+
+          {% do pimcore_head_title().append('GePyxis') %}
+          {% do pimcore_head_title().setSeparator(' - ') %}
+      {% endif %}
+
+      {% set isPortal = ((isPortal is defined) and isPortal) %}
+  {% endapply %}
+
+        {# we're using the deferred extension here to make sure this block is rendered after all helper calls #}
+        {% block layout_head_meta deferred %}
+            {{ pimcore_head_title() }}
+            {{ pimcore_head_meta() }}
+
+            {% if pimcore_placeholder('canonical').count() %}
+                <link rel="canonical" href="{{ pimcore_placeholder('canonical') }}"/>
+            {% endif %}
+
+        {% endblock %}
+
+        {% block head_stylesheets deferred %}
+            {{ pimcore_head_link() }}
+        {% endblock %}
+
+</head>
+
+<body>
+
+  <div class="preloaderBg" id="preloader" onload="preloader()">
+    <div class="preloader"></div>
+    <div class="preloader2"></div>
+  </div>
+{% include "gepyxis/includes/header.html.twig" %}
+<main role="main">
+
+<!-- ======= Hero Section ======= -->
+
+{% set carouselSlides = pimcore_select('carouselSlides', {
+    width: 70,
+    reload: true,
+    store: [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+    class: 'align-middle'
+}) %}
+{% set count = carouselSlides.getData() %}
+{% if count is empty or count == 0 %}
+    {% set count = 1 %}
+{% endif %}
+<section id="heroCarousel" class="carousel slide" data-bs-ride="carousel" {{ editmode ? 'data-bs-interval="false"' }}>
+    {% if count > 1 %}
+        <ol class="carousel-indicators">
+            {% for j in 0..(count - 1) %}
+                <li data-bs-target="#heroCarousel" data-bs-slide-to="{{ j }}" class="{{ j == 0 ? 'active':'' }}"></li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    <div class="carousel-inner">
+        {% for i in 0..(count - 1) %}
+        <div class="carousel-item position-relative {{ 'heroCarousel-' ~ i }} {% if loop.first %}active{% endif %}">
+            {% set cImage = pimcore_image('cImage_' ~ i, {
+                thumbnail: 'portalCarousel',
+                hidetext: true,
+                title: 'Arrastra imagen aquí',
+                imgAttributes: {class: 'd-block w-100'},
+                dropClass: 'portal-slide-' ~ (i + 1)
+            }) %}
+
+            {{ cImage|raw }}
+            <div class="carousel-caption d-block">
+                {% if i == 0 %}
+                    <h1>{{ pimcore_input('cHeadline_' ~ i,{'placeholder':'Título'}) }}</h1>
+                {% else %}
+                    <div class="display-1">{{ pimcore_input('cHeadline_' ~ i,{'placeholder':'Título'}) }}</div>
+                {% endif %}
+
+                <p class="hero-text">{{ pimcore_textarea('cText_' ~ i,{'placeholder':'Descripción'}) }}</p>
+                <p>{% set cLink = pimcore_link('cLink_' ~ i, {
+                        'class': 'btn btn-lg btn-primary'
+                    }) %}
+                    {{ cLink|raw }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if count > 1 %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    {% endif %}
+    {% if editmode %}
+        <div class="container pt-2 pb-5">
+            <span class="editmode-label align-middle d-inline-block">Cantidad de diapositivas:</span> {{ carouselSlides|raw }}
+        </div>
+    {% endif %}
+</section>
+
+<!-- End Hero -->
+
+  
+
+    <!-- ======= Services Section ======= -->
+    <section class="services">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up">
+            <div class="icon-box icon-box-pink">
+              <div class="icon"><i class="bx bxl-dribbble"></i></div>
+              <h4 class="title"><a href="">{{ pimcore_input("subtitle_1").render()|raw }}</a></h4>
+              <p class="description">{{ pimcore_input("description_1").render()|raw }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="icon-box icon-box-cyan">
+              <div class="icon"><i class="bx bx-file"></i></div>
+              <h4 class="title"><a href="">{{ pimcore_input("subtitle_2").render()|raw }}</a></h4>
+              <p class="description">{{ pimcore_input("description_2").render()|raw }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="icon-box icon-box-green">
+              <div class="icon"><i class="bx bx-tachometer"></i></div>
+              <h4 class="title"><a href="">{{ pimcore_input("subtitle_3").render()|raw }}</a></h4>
+              <p class="description">{{ pimcore_input("description_3").render()|raw }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="icon-box icon-box-blue">
+              <div class="icon"><i class="bx bx-world"></i></div>
+              <h4 class="title"><a href="">{{ pimcore_input("subtitle_4").render()|raw }}</a></h4>
+              <p class="description">{{ pimcore_input("description_4").render()|raw }}</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Why Us Section ======= -->
+    <section class="why-us section-bg" data-aos="fade-up" date-aos-delay="200">
+      <div class="container">
+
+        <div class="row">
+          <div class="col-lg-6 d-flex flex-column justify-content-center p-5">
+                 {{ pimcore_video('campaignVideo') }}
+          </div>
+
+          <div class="col-lg-6 d-flex flex-column justify-content-center p-5">
+
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-fingerprint"></i></div>
+              <h4 class="title"><a href="">{{ pimcore_input("subtitle_5").render()|raw }}</a></h4>
+              <p class="description">{{ pimcore_input("description_5").render()|raw }}</p>
+            </div>
+
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-cloud"></i></div>
+              <h4 class="title"><a href="">{{ pimcore_input("subtitle_6").render()|raw }}</a></h4>
+              <p class="description">{{ pimcore_input("description_6").render()|raw }}</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Why Us Section -->
+
+    <!-- ======= Features Section ======= -->
+    <section class="features">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>{{ pimcore_input("features").render()|raw }}</h2>
+          <p>{{ pimcore_input("description_7").render()|raw }}</p>
+        </div>
+
+        <div class="row" data-aos="fade-up">
+          <div class="col-md-5">
+            <img src="assets/img/features-1.svg" class="img-fluid" alt="">
+          </div>
+          <div class="col-md-7 pt-4">
+            <h3>{{ pimcore_input("subtitle_8").render()|raw }}</h3>
+            <p class="fst-italic">{{ pimcore_input("description_8").render()|raw }}
+        
+            </p>
+         
+          </div>
+        </div>
+
+        <div class="row" data-aos="fade-up">
+          <div class="col-md-5 order-1 order-md-2">
+            <img src="assets/img/features-2.svg" class="img-fluid" alt="">
+          </div>
+          <div class="col-md-7 pt-5 order-2 order-md-1">
+            <h3>{{ pimcore_input("subtitle_9").render()|raw }}</h3>
+            <p class="fst-italic">
+              {{ pimcore_input("description_9").render()|raw }}
+            </p>
+            <p>{{ pimcore_input("description_").render()|raw }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row" data-aos="fade-up">
+          <div class="col-md-5">
+            <img src="assets/img/features-3.svg" class="img-fluid" alt="">
+          </div>
+          <div class="col-md-7 pt-5">
+            <h3>{{ pimcore_input("subtitle_10").render()|raw }}</h3>
+            <p>{{ pimcore_input("description_10").render()|raw }}</p>
+            <ul>
+              <li><i class="bi bi-check"></i>{{ pimcore_input("l3").render()|raw }}  </li>
+              <li><i class="bi bi-check"></i>{{ pimcore_input("l4").render()|raw }}  </li>
+              <li><i class="bi bi-check"></i>{{ pimcore_input("l5").render()|raw }}  </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="portal" class="portal-page">
+        {{ pimcore_areablock('contenter', {
+            'allowed': ['hero-teaser']
+        }) }}
+    </div>
+
+        <div>
+          <section class="services">
+            <div class="container" data-aos="fade-up">
+              {{ pimcore_areablock('content', {
+                  'allowed': ['blockquote', 'embed', 'featurette', 'gallery-carousel', 'gallery-folder',
+                      'gallery-single-images', 'headlines', 'horizontal-line', 'icon-teaser-row', 'image',
+                      'image-hotspot-marker', 'image-metadata', 'pdf', 'product-grid', 'product-teaser', 'standard-teaser', 'text-accordion',
+                      'time-slider-featurette', 'video', 'wysiwyg', 'wysiwyg-with-images', 'personalized-product-teaser', 'feature', 'product-price', 'title', 'gepyxis-product-teaser', 'why-us'],'class': 'row'
+              }
+              ) }}
+            </div>
+          </section>
+       </div>
+
+      </div>
+    </section>
+    <!-- End Features Section -->
+
+  </main>
+  <!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <div class="whatsapp-button">
+    <a href="https://api.whatsapp.com/send?phone=525522793490" target="_blank" rel="noopener" class="whatsapp">
+      <i class="fab fa-whatsapp fa-2x"></i>
+    </a>
+  </div>
+
+        {# include a document-snippet - in this case the footer document #}
+        {{ pimcore_inc(document.getProperty('footer')) }}
+
+        {{ pimcore_inc(document.getProperty('footerGP')) }}
+
+        {# output scripts added before #}
+        {% block headscripts deferred %}
+            {{ pimcore_head_script() }}
+        {% endblock %}
+
+
+        {% block inlinescripts deferred %}
+            {{ pimcore_inline_script() }}
+        {% endblock %}
+
+  <!-- Vendor JS Files -->
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/purecounter/purecounter_vanilla.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/aos/aos.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/glightbox/js/glightbox.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/isotope-layout/isotope.pkgd.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/swiper/swiper-bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/waypoints/noframework.waypoints.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/js/main.js')) %}
+
+
+</body>
+
+</html>

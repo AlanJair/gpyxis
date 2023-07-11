@@ -1,0 +1,372 @@
+{% do pimcore_head_link().appendStylesheet('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css') %}
+{% if editmode %}
+    {# {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/animate.css/animate.min.css')) %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/assets/vendor/bootstrap/css/bootstrap.min.css')) %} #}
+    {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+{% endif %}
+{% do pimcore_head_script().appendFile('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js') %}
+{% if not editmode %}
+    {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+{% endif %}
+{% if document.getTitle() is not empty %}
+    {% do pimcore_head_title().set(document.getTitle()) %}
+{% endif %}
+{{ pimcore_head_title() }}
+{{ pimcore_head_link() }}
+
+{% set heightSlide = pimcore_numeric('heightSlide',{
+    maxValue : 250,
+    minValue : 50,
+    width : 220,
+    decimalPrecision : 0,
+    required: true
+}) %}
+{% set hSlide = heightSlide.getData() %}
+{% if hSlide < 50 %}
+  {% set hSlide = 50 %}
+{% elseif hSlide > 250 %}
+   {% set hSlide = 250 %}
+{% endif %}
+{% set marginImg = pimcore_numeric('marginImg',{
+    minValue : 0,
+    width : 220,
+    decimalPrecision : 0
+}) %}
+{% set mImg = marginImg.getData() %}
+{% if mImg is empty or mImg < 0 %}
+    {% set mImg = 0 %}
+{% endif %}
+{% set slide = pimcore_numeric('slide',{
+    maxValue : 100,
+    minValue : 8,
+    width : 220,
+    decimalPrecision : 0,
+    required: true
+}) %}
+{% set slides = slide.getData() %}
+{% if slides <= 7 %}
+  {% set slides = 8 %}
+{% elseif slides > 100 %}
+   {% set slides = 100 %}
+{% endif %}
+{% set imageSlide = pimcore_image('imageSlide', {
+    thumbnail: 'imgSwiperProject',
+    hidetext: true,
+    title: 'Esta imagen sera la misma para todos los slide',
+    required: false
+}) %}
+{% set showPagination = pimcore_checkbox('showPagination', {
+    reload: false
+}) %}
+{% set roundedCircle = pimcore_checkbox('roundedCircle', {
+    reload: false
+}) %}
+{% set showBgSection = pimcore_checkbox('showBgSection', {
+    reload: false
+}) %}
+<style type="text/css">
+    {{
+      '.swiper {
+        width: 100%;
+        height: ' ~ hSlide ~ 'px;
+      }'
+    }}
+
+    #previewSwiper {
+      width: 100%;
+      height: 135px; /* Recomendado usar pixeles. Ej:135px -Pero inicia en 100% */
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: normal;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      /* height: 100%; */ /*La altura ya es controlada desde pimcore*/
+      object-fit: fill /* Tambien puede ser "contain" para conservar un tamaño moderado sin distorsionar o "cover" para mantener el tamaño real*/;
+    }
+    {% if not pimcore_checkbox('showPagination').isChecked() %}
+        .swiper-pagination-bullets {
+        display: none;
+        }
+    {% endif %}
+</style>
+
+{% if editmode %}
+<div class="row container wl-30">
+    <div class="pt-2 col-5">
+        <span class="editmode-label align-middle d-inline-block">Altura del slide en px:</span>
+            {{ heightSlide|raw }} (Minimo 50px - Maximo 250px) <br><br>
+        <span class="editmode-label align-middle d-inline-block">Número de slides:</span>
+            {{ slide|raw }} (Minimo 8 - Maximo 100) <br><br>
+        <section class="area-image d-block w-55">
+            <span class="editmode-label align-middle d-inline-block">Elige la imagen que tendrán los slides</span>
+            {{ imageSlide|raw }}
+        </section> <br>
+        <div class="col-xs-6 d-inline ml-5">
+            <span class="editmode-label align-middle">Mostrar puntos de paginación
+                {{ showPagination|raw }}</span>
+        </div> <br>
+        <div class="col-xs-6 d-inline ml-5">
+            <span class="editmode-label align-middle d-inline-block">Redondear círculo
+            {{ roundedCircle|raw }}</span>
+        </div>
+    </div>
+    <div class="pt-2 col-5">
+        <span class="editmode-label align-middle d-inline-block">Margen superior de la imagen en px:</span>
+        {{ marginImg|raw }}
+        (La imagen pequeña se alejara mas del margen superior)
+    </div>
+</div> <br><br>
+
+<div class="alert alert-secondary col-xs-12" style="height: 75px">
+    <div class="d-inline ml-5">
+        <span class="editmode-label align-middle">Conservar fondo blanco</span>
+        {{ showBgSection|raw }}
+    </div>
+</div>
+{% endif %}
+
+<section {{ pimcore_checkbox("showBgSection").isChecked()  ? 'class="services"':'class="services section-bg"' }} data-aos="fade-up">
+      <div class="container">
+
+        <div class="row">
+
+            <div class="swiper mySwiper swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
+                <div class="swiper-wrapper" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+                    {% for i in 1..(slides) %}
+                        {% if i == 1 %}
+                            <div class="swiper-slide swiper-slide-active" role="group" aria-label={{ '1 / ' ~ slides }} style="width: 435.333px; margin-right: 30px;">
+                        {% elseif i == 2 %}
+                            <div class="swiper-slide swiper-slide-next" role="group" aria-label={{ '2 / ' ~ slides }} style="width: 435.333px; margin-right: 30px;">
+                        {% else %}
+                            <div class="swiper-slide" role="group" aria-label={{ i ~ ' / ' ~ slides }} style="width: 435.333px; margin-right: 30px;">
+                        {% endif %}
+                            <div class="position-absolute">
+                                {{ pimcore_image('imageSmall' ~ i, {
+                                    thumbnail: 'imgProjects',
+                                    hidetext: true,
+                                    title: 'Arrastre la pequeña imagen aqui',
+                                    imgAttributes: {class: pimcore_checkbox("roundedCircle").isChecked()  ? 'rounded-circle':'', style: 'margin-top:' ~ mImg ~ 'px;'},
+                                    required: false
+                                }) }}
+                            </div>
+                            {% if not editmode %}
+                                {{ imageSlide|raw }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
+                    {% for i in 1..(slides) %}
+                        {% if i == 1 %}
+                            <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1" aria-current="true"></span>
+                        {% else %}
+                            <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label={{ 'Go to slide ' ~ i }}></span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if editmode %}
+    <br>
+    <br>
+    <section class="services" data-aos="fade-up">
+        <div class="container">
+            <div class="row">
+
+                Aqui una prueba de un swiper {# Ejemplo estatico #}
+                <div id="previewSwiper" class="swiper previewSwiper swiper-initialized swiper-horizontal swiper-free-mode swiper-backface-hidden">
+                    <div class="swiper-wrapper" aria-live="polite" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+
+                    <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png" alt="...">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide swiper-slide-next" role="group" aria-label="2 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="3 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="4 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="5 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="6 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="7 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="8 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    <div class="swiper-slide" role="group" aria-label="9 / 9" style="width: 435.333px; margin-right: 30px;">
+                        <div class="position-absolute">
+                        <img class="rounded-circle" style="margin-top: 21px;" src="../../static/assets/img/logos/maskable_icon_x48.png">
+                        </div>
+                        <img src="../../static/assets/img/item_lap.jfif" alt="..." class="fix-size-img">
+                    </div>
+                    
+                    </div>
+
+                    <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
+                        <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1" aria-current="true"></span>
+                        <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span>
+                        <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span>
+                        <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span>
+                        <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 5"></span>
+                        <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 6"></span>
+                        <span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 7"></span>
+                    </div>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <br>
+{% endif %}
+
+{{ pimcore_head_script() }}
+<script>
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      //grabCursor: true, // Sirve para cambiar el puntero/cursor a una mano
+      freeMode: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        // when window width is >= 320px
+        250: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        370: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        },
+        420: {
+          slidesPerView: 3,
+          spaceBetween: 30
+        },
+        // when window width is >= 480px
+        490: {
+          slidesPerView: 4,
+          spaceBetween: 15
+        },
+        600: {
+          slidesPerView: 4,
+          spaceBetween: 25
+        },
+        640: {
+          slidesPerView: 5,
+          spaceBetween: 20
+        },
+        800: {
+          slidesPerView: 6,
+          spaceBetween: 25
+        },
+        990: {
+          slidesPerView: 7,
+          spaceBetween: 25
+        },
+        1250: {
+          slidesPerView: 8,
+          spaceBetween: 15
+        }
+      }
+    });
+
+    var swiper = new Swiper(".previewSwiper", {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      //grabCursor: true, // Sirve para cambiar el puntero/cursor a una mano
+      freeMode: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        // when window width is >= 320px
+        250: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        370: {
+          slidesPerView: 3,
+          spaceBetween: 20
+        },
+        420: {
+          slidesPerView: 3,
+          spaceBetween: 30
+        },
+        // when window width is >= 480px
+        490: {
+          slidesPerView: 4,
+          spaceBetween: 15
+        },
+        600: {
+          slidesPerView: 4,
+          spaceBetween: 25
+        },
+        640: {
+          slidesPerView: 5,
+          spaceBetween: 20
+        },
+        800: {
+          slidesPerView: 6,
+          spaceBetween: 25
+        },
+        990: {
+          slidesPerView: 7,
+          spaceBetween: 25
+        },
+        1250: {
+          slidesPerView: 8,
+          spaceBetween: 15
+        }
+      }
+    });
+</script>

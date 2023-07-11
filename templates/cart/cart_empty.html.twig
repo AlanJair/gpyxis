@@ -1,0 +1,23 @@
+{% extends 'gepyxis/layouts/layout.html.twig' %}
+
+{% block content %}
+<section>
+    <div class="py-5 bg-light">
+        <div class="container">
+
+            <h4 class="mb-3">{{ '¡Su carrito está vacío!'}}</h4>
+
+            <div class="text-center">
+
+                <a href="/Soluciones" class="btn btn-outline-secondary">
+                    {{ 'Ver soluciones' }}
+                </a>
+                <a href="/Servicios" class="btn btn-outline-secondary">
+                    {{ 'Ver servicios' }}
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,174 @@
+<style type="text/css">
+    .search-section{
+        position: relative;
+        width: 50%;
+        height: 40px;
+        background: #fff;
+        border-radius: 60px;
+        transition: 0.5s;
+        box-shadow: 0 0 0 3px #1976D2;
+        overflow: hidden; 
+    }
+
+    .search-section .icon{
+        position: absolute;
+        top: 0;
+        Left: 0;
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: 60px 0 0 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        cursor: pointer;
+    }
+
+    .search-section .icon::before{
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #1976D2;
+        border-radius: 50%;
+        transform: translate(0, -11px);
+    }
+
+    .search-section .icon::after{
+        content: '';
+        position: absolute;
+        width: 3px;
+        height: 10px;
+        background: #1976D2;
+        transform: translate(10px,-1px) rotate(315deg);
+    }
+
+    .search-section .search{
+        position: relative;
+        width: 87%;
+        height: 43px;
+        Left: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-section .search input{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: navajowhite;
+        font-size: 18px;
+        padding: 10px 0;
+    }
+
+    /* SELECT */
+    .select-section {
+        position: absolute;
+        top: 55px;
+        left: 55%;
+        width: 15%;
+        height: 45px;
+    }
+    
+    .selectBox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        background: #fff;
+        border: none;
+        outline: none;
+        /*appearance:none;*/
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 17px;
+        z-index: 100;
+    }
+
+    .select-section .icon-select{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 20%;
+        height: 60px;
+        background: #fff;
+        border-radius: 0 10px 10px 0;
+        display: flex;
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .select-section .icon-select::before {
+        content: '';
+        position: absolute;
+        right: 40%;
+        top: 25px;
+        z-index: 10000;
+        width: 8px;
+        height: 8px;
+        border: 2px solid #333;
+        border-top: 2px solid #fff;
+        border-right: 2px solid #fff;
+        transform: rotate(-45deg);
+        transition: 0.5s;
+    }
+
+</style>
+{# RECORDAR PASAR SECTION Y CONTAINER A LA PAGINA PADRE #}
+<section class="services" data-aos="fade-up">
+    <div class="container">
+        
+        <form id="searchSection" method="get">
+            <div class="search-section">
+                <div class="icon"></div>
+                <div class="search">
+                    <input id="inputSearchSection" type="search" name="searchsection" value="{{ app.request.get("searchsection") }}" placeholder="Buscar">
+                </div>
+            </div>
+            <div class="select-section">
+                <select id="selectCategory" class="selectBox" name="categoryselect">
+                    {% if app.request.get("categoryselect") is empty %}
+                        <option value="" selected disabled>Categorías</option>
+                    {% else %}
+                        <option value="" disabled>Categorías</option>
+                    {% endif %}
+                        <option href="{{pimcore_document(216)}}">Todas</option>
+                    {% if sectionCategories is defined and sectionCategories|length %}
+                    {% for category in sectionCategories %}
+                        {# <p>Aqui: {{category.proyecyos|join(', ')}} </p> #}
+                        {% if app.request.get("categoryselect") == category.id %}
+                        <option value="{{ category.id }}" selected>{{ category.getTitulo() }}</option>
+                        {% else %}
+                        <option value="{{ category.id }}">{{ category.getTitulo() }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {# {{ options|raw }} #}
+                </select>
+            </div>
+            <button type="submit" style="display:none;">Buscar</button>
+        </form>
+
+    </div>
+</section>
+  
+   {# <div class="search-section">
+        <div class="icon"></div>
+        <div class="search">
+            <input id="inputSearch" type="search" placeholder="Buscar">
+        </div>
+    </div>
+    <div class="select-section">
+        <select id="selectCategory" class="selectBox" name="categories" id="">
+            <option selected disabled>Categorías</option>
+            {{ options|raw }}
+        </select>
+        <div class="icon-select"></dic>
+    </div> #}

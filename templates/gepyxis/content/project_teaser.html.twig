@@ -1,0 +1,48 @@
+{% set detailLink = app_product_detaillink(project) %}
+<div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up">
+{% if(project.iconBoxColor) %}
+    <div class="icon-box icon-box-{{ project.iconBoxColor }}" style="padding:0;">
+{% else %}
+    <div class="icon-box icon-box-blue"  style="padding:0;">
+{% endif %}
+    {% if(project.imagenPrincipal) %}
+        {{ project.imagenPrincipal.thumbnail('projects').html({imgAttributes: {class:'w-100', style:'margin-bottom:20px;'}}) | raw }}
+    {% endif %}
+    {# <img src="../static/assets/img/pagina.jpeg" alt="..." class="w-100" style="height:180px; margin-bottom:20px;"> #}
+    {# {{ pimcore_image('imageProject', {
+        thumbnail: 'projects',
+        hidetext: true,
+        title: 'Arrastre la imagen aqui',
+        imgAttributes: {class:'w-100', style:'margin-bottom:20px;'},
+        required: false
+    }) }} #}
+    {# {% set detailLink = app_product_detaillink(project) %}
+    <h4 class="title"><a href="{{ detailLink }}">{{ project.nombre|striptags }}</a></h4> #}
+    <h4 class="title"><a href="{{ detailLink }}" style="text-decoration: none;">{{ project.titulo|striptags }}</a></h4>
+    <h4 class="description">{{ project.descripcion|striptags }}</h4>
+</div>
+</div>
+{# <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+<div class="icon-box icon-box-cyan" style="padding:0;">
+<img src="../static/assets/img/about.jpg" alt="..." class="fix-size-img" style="width:100%;">
+<h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
+<p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+</div>
+</div>
+
+<div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+<div class="icon-box icon-box-green" style="padding:0;">
+<img src="../static/assets/img/about.jpg" alt="..." class="fix-size-img" style="width:100%;">
+<h4 class="title"><a href="">Magni Dolores</a></h4>
+<p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+</div>
+</div>
+
+<div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+<div class="icon-box icon-box-blue" style="padding:0;">
+<img src="../static/assets/img/about.jpg" alt="..." class="fix-size-img" style="width:100%;">
+
+<h4 class="title"><a href="">Nemo Enim</a></h4>
+<p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
+</div>
+</div> #}

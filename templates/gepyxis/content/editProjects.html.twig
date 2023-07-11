@@ -1,0 +1,33 @@
+{# @var item \App\Model\Project\Project #}
+
+{% extends 'gepyxis/layouts/ge_pyxis_projects.html.twig' %}
+
+{% block content %}
+        {{ pimcore_areablock('content', {
+            'allowed': ['bar-search', 'swiper'],
+            "limits": {
+                "bar-search": 1,
+                "swiper": 1
+                },
+        }) }}
+
+        {# <section {{ pimcore_checkbox("showBgSectionPro").isChecked()  ? 'class="services"':'class="services section-bg"' }}> #}
+        <section class="services">
+                <div class="container">
+                        <div class="row">
+                        {% if paginator|length %}
+                                {# <p>Para debbugear: {{ term }}</p> #}
+                                {# <p>Para debuggear: {{ dump() }}</p> #}
+                                {%  for item in paginator %}
+                                        {% include 'gepyxis/content/project_teaser.html.twig' with {'project': item} %}
+                                {% endfor %}
+                        {% else %}
+                                {# <p>Para debuggear: {{ dump() }}</p> #}
+                                <h3 class="text-center">Lo sentimos, no hemos encontrado nada para tu término de búsqueda.</h3>
+                                <h2 class="text-center">{{ term | upper }}</h2>
+                        {% endif %}
+                         {# {% include 'gepyxis/content/project_teaser.html.twig' %} #}
+                        </div>
+                </div>
+        </section>
+{% endblock %}

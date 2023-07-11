@@ -1,0 +1,65 @@
+{% if editmode %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+    {{ pimcore_head_link() }}
+{% endif %}
+{#footer#}
+  <!-- ======= Footer ======= -->
+  <footer id="footer" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+        {% if editmode %}
+            <h3 class="float-left">{{ 'Footer columna(s):' }}</h3>
+        {% endif %}
+        {% for i in pimcore_iterate_block(pimcore_block('mainlinkblock')) %}
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>{{ pimcore_input('mainBlockTitle', {'placeholder': 'Título footer'}) }}</h4>
+            <ul>
+               {% for i in pimcore_iterate_block(pimcore_block('linkblock')) %}
+                        <li><i class="bx bx-chevron-right"></i>{{ pimcore_link('myLink') }}</li>
+                {% endfor %}
+            </ul>
+          </div>
+        {% if editmode %}
+                <hr />
+            {% endif %}
+        {% endfor %}
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>{{ pimcore_input("footer_contact").render()|raw }}</h4>
+            <p>
+              <b>{{ pimcore_input("footer_text3").render()|raw }} </b>{{ pimcore_input("footer_tel").render()|raw }}<br>
+              <strong>{{ pimcore_input("footer_text2").render()|raw }} </strong>{{ pimcore_input("footer_mail").render()|raw }}<br>
+            </p>
+
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-info">
+            <h3>{{ pimcore_input("footer_p").render()|raw }}</h3>
+            <p>{{ pimcore_input("footer_p2").render()|raw }}</p>
+            <div class="social-links mt-3">
+              {{ editmode ? 'Enlace twitter: ' : '' }} {{ pimcore_link('twitter', {'class': "twitter bx bxl-twitter"}).render()|raw }}
+              {{ editmode ? 'Enlace facebook: ' : '' }} {{ pimcore_link('facebook', {'class': "facebook bx bxl-facebook"}).render()|raw }}
+              {{ editmode ? 'Enlace instagram: ' : '' }} {{ pimcore_link('instagram', {'class': "instagram bx bxl-instagram"}).render()|raw }}
+              {{ editmode ? 'Enlace linkedin: ' : '' }} {{ pimcore_link('linkedin', {'class': "linkedin bx bxl-linkedin"}).render()|raw }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy;{{ pimcore_input("year").render()|raw }} <strong><span>{{ pimcore_input("copyright").render()|raw }}</span></strong>
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/free-bootstrap-template-corporate-moderna/ -->
+        <!--Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>-->
+      </div>
+    </div>
+  </footer><!-- End Footer -->

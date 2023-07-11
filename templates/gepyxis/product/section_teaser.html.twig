@@ -1,0 +1,15 @@
+{% set detailLink = app_product_detaillink(project) %}
+<div class="col-md-6 d-flex align-items-stretch"  data-aos="fade-up">
+    <div class="card">
+        <div class="card-img">
+            {% if(project.imagenPrincipal) %}
+                {{ project.imagenPrincipal.thumbnail('section').html({imgAttributes: {style:'max-width: 100%; transition: all 0.3s ease-in-out;'}}) | raw }}
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title"><a href="{{ detailLink }}">{{ project.nombre|striptags }}</a></h5>
+            <p class="card-text">{{ project.descripcion|striptags }}</p>
+            <div class="read-more"><a href="{{ detailLink }}"><i class="bi bi-arrow-right"></i> Leer más</a></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+{% extends 'gepyxis/layouts/ge_pyxis_section.html.twig' %}
+
+{% block content %}
+    {{include('gepyxis/snippets/includes/search-section.html.twig') }}
+
+
+    <!-- ======= Details Section ======= -->
+    <section class="service-details" data-aos="fade-up">
+            <div class="container">
+                    <div class="row">
+                    {% if results|length %}
+                            {# <p>Para debbugear: {{ term }}</p> #}
+                            {# <p>Para debuggear: {{ debug }}</p> #}
+                            {# {{ debug|join(', ')}} #}
+                            {%  for item in results %}
+                                    {% include 'gepyxis/product/section_teaser.html.twig' with {'project': item} %}
+                            {% endfor %}
+                    {% else %}
+                        {% if term is empty %}
+                            <h3 class="text-center" data-aos="fade-up">Lo sentimos, no existen {{ document.getTitle() | lower }} por el momento.</h3>
+                        {% else %}
+                            <h3 class="text-center" data-aos="fade-up">Lo sentimos, no hemos encontrado {{ document.getTitle() | lower }} para su término de búsqueda.</h3>
+                            <h2 class="text-center" data-aos="fade-up">{{ term | upper }}</h2>
+                        {% endif %}
+                            {% if categoriaid is defined %}
+                                <p>Para debuggear: {{ categoriaid }}</p>
+                            {% endif %}
+                    {% endif %}
+                        {# {% include 'gepyxis/product/project_teaser.html.twig' %} #}
+                    </div>
+            </div>
+    </section><!-- End Details Section -->
+    {# {{ pimcore_areablock('content', {
+            'allowed': ['service-teaser']
+        })
+    }} #}
+{% endblock %}
+
+{# {% if app.request.get("categoryselect") is empty %}
+    <option value="" selected disabled>Categorías</option>
+{% else %}
+    <option value="" disabled>Categorías</option>
+{% endif %}
+{% for category in sectionCategories %}
+    {% if app.request.get("categoryselect") == category.id %}
+    <option value="{{ category.id }}" selected disabled>{{ category.getTitulo() }}</option>
+    {% else %}
+    <option value="{{ category.id }}">{{ category.getTitulo() }}</option>
+    {% endif %}
+{% endfor %} #}

@@ -1,0 +1,85 @@
+{# N Slides #}
+{% set pcSlides = pimcore_select('pcSlides', {
+  width: 70,
+  reload: true,
+  store: [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+  class: 'align-middle'
+}) %}
+{% set pcount = pcSlides.getData() %}
+{% if pcount is empty or pcount == 0 %}
+  {% set pcount = 1 %}
+{% endif %}
+
+{# N pcolumns #}
+{% set pcolumns = pimcore_select('pcolumns', {
+  width: 70,
+  reload: true,
+  store: [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+  class: 'align-middle'
+}) %}
+{% set pCol = pcolumns.getData() %}
+{% if pCol is empty or pCol == 0 %}
+  {% set pCol = 1 %}
+{% endif %}
+
+{# Mostrar flechas laterales para el cambio de slides #}
+{% set pShowCarouselControl = pimcore_checkbox('pShowCarouselControl', {
+    reload: true
+}) %}
+
+{% if editmode %}
+    <div class="alert alert-secondary col-xs-12" style="height: 75px">
+        <div class="d-inline ml-5">
+            <span class="editmode-label align-middle">Mostrar flechas laterales para el cambio de slides</span>
+            {{ pShowCarouselControl|raw }}
+        </div>
+    </div>
+{% endif %}
+
+<div id="partnerCarousel" class="carousel slide" data-bs-ride="carousel" data-aos="fade-up" {{ editmode ? 'data-interval="false"' }}>
+      
+  <div class="carousel-inner ">
+  {% for i in 0..(pcount - 1) %}
+    <div class="carousel-item {{ loop.first ? 'active' }}">
+      {# <img src="static/assets/img/customers/customers_01.jpg" class="d-block w-100" alt="..."> #}
+      {# {{ pcImage|raw }} #}
+      <div class="row">
+        {% for n in 0..(pCol - 1) %}
+        <div class="col">
+          {# <img src="static/assets/img/team/team-1.jpg" class="d-block w-100" alt="..."> #}
+          {% set pcImage = pimcore_image('pcImage_' ~ i ~ '-' ~ n, {
+              thumbnail: 'partnerCarousel',
+              hidetext: true,
+              title: 'Arrastre la imagen aqui',
+              imgAttributes: {class: 'd-block w-75'},
+              dropClass: 'portal-slide-' ~ (i + 1)
+          }) %}
+          {{ pcImage|raw }} 
+        </div>
+        {% endfor %}
+      </div>
+
+    </div> {# End image #}
+    {% endfor %}
+  </div><br><br>
+  {% if pcount > 1 %}
+    {% if pimcore_checkbox("pShowCarouselControl").isChecked() %}
+      <button class="carousel-control-prev" type="button" data-bs-target="#partnerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#partnerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+      </button>
+    {% endif %}
+  {% endif %}
+  {% if editmode %}
+    <div class="container pt-2 pb-5">
+        <span class="editmode-label align-middle d-inline-block">Número de slides:</span> {{ pcSlides|raw }}
+    </div>
+    <div class="container pt-2 pb-5">
+        <span class="editmode-label align-middle d-inline-block">Número de columnas:</span> {{ pcolumns|raw }}
+    </div>
+  {% endif %}
+</div>

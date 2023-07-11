@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <!-- Favicons -->
+ <link href="https://gepyxis.mx/img/icono.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+
+  {% apply spaceless %}
+            {# add global stylesheets and scripts outside of any blocsk to add them to the helpers before any others assets are added #}
+            {# we use the view helper to have cache buster functionality #}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/animate.css/animate.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/aos/aos.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap/css/bootstrap.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap/css/bootstrap.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap-icons/bootstrap-icons.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/boxicons/css/boxicons.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/glightbox/css/glightbox.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/swiper/swiper-bundle.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/css/style.css')) %}
+            {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Hind+Guntur:300,400,500,600,700&display=swap') %}
+            {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.9.0/css/all.css') %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/lib/magnific/magnific.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/lib/autocompletejs/css/autoComplete.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.7.0/css/all.css',null,null,{integrity:'sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ',crossorigin:'anonymous'}) %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/css/global.css')) %}
+            {% if editmode %}
+                {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+            {% endif %}
+            {% do pimcore_head_script().appendFile('https://code.jquery.com/jquery-3.3.1.slim.min.js',null,null,{ integrity:"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',null,null,{ integrity:"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js',null,null,{ integrity:"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile(asset('static/lib/magnific/magnific.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/lib/autocompletejs/js/autoComplete.min.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/js/search-autocomplete.js')) %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/css/style.css'), 'screen') %}
+            {% do pimcore_head_script().appendFile(asset('static/js/main.js')) %}
+            
+            {% if not editmode %}
+                    {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+            {% endif %}
+
+            {% if not document is defined or not document %}
+                {% set document = pimcore_document(1) %}
+            {% endif %}
+
+            {% if document is instanceof('\\Pimcore\\Model\\Document\\Link') %}
+                {# @var document \Pimcore\Model\Document\Link #}
+                {% set document = document.getObject() %}
+            {% endif %}
+
+            {% if document is instanceof('\\Pimcore\\Model\\Document\\Page') %}
+                {% if document.getTitle() is not empty %}
+                    {% do pimcore_head_title().set(document.getTitle()) %}
+                {% endif %}
+
+                {% if document.getDescription() is not empty %}
+                    {% do pimcore_head_meta().setDescription(document.getDescription()) %}
+                {% endif %}
+
+                {% do pimcore_head_title().append('Pimcore Demo') %}
+                {% do pimcore_head_title().setSeparator(' : ') %}
+            {% endif %}
+
+            {% set isPortal = ((isPortal is defined) and isPortal) %}
+        {% endapply %}
+
+        {# we're using the deferred extension here to make sure this block is rendered after all helper calls #}
+        {% block layout_head_meta deferred %}
+            {{ pimcore_head_title() }}
+            {{ pimcore_head_meta() }}
+
+            {% if pimcore_placeholder('canonical').count() %}
+                <link rel="canonical" href="{{ pimcore_placeholder('canonical') }}"/>
+            {% endif %}
+
+        {% endblock %}
+
+        {% block head_stylesheets deferred %}
+            {{ pimcore_head_link() }}
+        {% endblock %}
+
+</head>
+
+<body>
+
+  {% include "gepyxis/includes/header.html.twig" %}
+
+
+<!-- ======= Hero Section ======= -->
+
+{% set carouselSlides = pimcore_select('carouselSlides', {
+    width: 70,
+    reload: true,
+    store: [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5]],
+    class: 'align-middle'
+}) %}
+{% set count = carouselSlides.getData() %}
+{% if count is empty or count == 0 %}
+    {% set count = 1 %}
+{% endif %}
+<section id="heroCarousel" class="carousel slide" data-bs-ride="carousel" {{ editmode ? 'data-bs-interval="false"' }}>
+    {% if count > 1 %}
+        <ol class="carousel-indicators">
+            {% for j in 0..(count - 1) %}
+                <li data-bs-target="#heroCarousel" data-bs-slide-to="{{ j }}" class="{{ j == 0 ? 'active':'' }}"></li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    <div class="carousel-inner">
+        {% for i in 0..(count - 1) %}
+        <div class="carousel-item position-relative {{ 'heroCarousel-' ~ i }} {% if loop.first %}active{% endif %}">
+            {% set cImage = pimcore_image('cImage_' ~ i, {
+                thumbnail: 'portalCarousel',
+                hidetext: true,
+                title: 'Arrastra imagen aquí',
+                imgAttributes: {class: 'd-block w-100'},
+                dropClass: 'portal-slide-' ~ (i + 1)
+            }) %}
+
+            {{ cImage|raw }}
+            <div class="carousel-caption d-block">
+                {% if i == 0 %}
+                    <h1>{{ pimcore_input('cHeadline_' ~ i,{'placeholder':'Título'}) }}</h1>
+                {% else %}
+                    <div class="display-1">{{ pimcore_input('cHeadline_' ~ i,{'placeholder':'Título'}) }}</div>
+                {% endif %}
+
+                <p class="hero-text">{{ pimcore_textarea('cText_' ~ i,{'placeholder':'Descripción'}) }}</p>
+                <p>{% set cLink = pimcore_link('cLink_' ~ i, {
+                        'class': 'btn btn-lg btn-primary'
+                    }) %}
+                    {{ cLink|raw }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if count > 1 %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    {% endif %}
+    {% if editmode %}
+        <div class="container pt-2 pb-5">
+            <span class="editmode-label align-middle d-inline-block">Cantidad de diapositivas:</span> {{ carouselSlides|raw }}
+        </div>
+    {% endif %}
+</section>
+
+<!-- End Hero -->
+
+
+  <main id="main-content" class="main-content" >
+    <div class="container" data-aos="fade-up">
+   {{ pimcore_areablock('content', {
+            'allowed': ['blockquote', 'embed', 'featurette', 'gallery-carousel', 'gallery-folder',
+                'gallery-single-images', 'headlines', 'horizontal-line', 'icon-teaser-row', 'image',
+                'image-hotspot-marker', 'image-metadata', 'pdf', 'product-grid', 'product-teaser', 'standard-teaser', 'text-accordion',
+                'time-slider-featurette', 'video', 'wysiwyg', 'wysiwyg-with-images', 'personalized-product-teaser', 'feature', 'product-price', 'title']
+        }) }}
+        </div>
+
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+        {# include a document-snippet - in this case the footer document #}
+        {{ pimcore_inc(document.getProperty('footer')) }}
+
+        {{ pimcore_inc(document.getProperty('footerGP')) }}
+
+        {# output scripts added before #}
+        {% block headscripts deferred %}
+            {{ pimcore_head_script() }}
+        {% endblock %}
+
+
+        {% block inlinescripts deferred %}
+            {{ pimcore_inline_script() }}
+        {% endblock %}
+
+  <!-- Vendor JS Files -->
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/purecounter/purecounter_vanilla.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/aos/aos.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/glightbox/js/glightbox.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/isotope-layout/isotope.pkgd.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/isotope-layout/isotope.pkgd.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/swiper/swiper-bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/waypoints/noframework.waypoints.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/php-email-form/validate.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/js/main.js')) %}
+
+
+</body>
+
+</html>

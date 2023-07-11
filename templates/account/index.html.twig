@@ -1,0 +1,208 @@
+{# @var order \Pimcore\Model\DataObject\OnlineShopOrder #}
+
+{% extends 'gepyxis/layouts/layout.html.twig' %}
+
+{% block content %}
+
+<div class="pb-5 bg-light">
+    <div class="container">
+
+        <h1 class="display-4">Hola {{ app.user.firstname }}</h1>
+
+        <div class="row">
+
+            <div class="col-12 col-md-6">
+
+                <div class="card">
+                    <div class="card-header">
+                        <strong>{{ 'Datos del cliente' }}</strong>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <dl class="item-property col-6">
+                                <dt>{{ 'Nombre'}}</dt>
+                                <dd>{{ app.user.firstname }}</dd>
+                            </dl>
+
+                            <dl class="item-property col-6">
+                                <dt>{{ 'Apellido' }}</dt>
+                                <dd>{{ app.user.lastname }}</dd>
+                            </dl>
+
+                            <dl class="item-property col-12">
+                                <dt>{{ 'Correo' | trans }}</dt>
+                                <dd>{{ app.user.email }}</dd>
+                            </dl>
+
+                            {% if app.user.company %}
+                                <dl class="item-property col-6">
+                                    <dt>{{ 'Empresa' }}</dt>
+                                    <dd>{{ app.user.company }}</dd>
+                                </dl>
+                            {% endif %}
+
+                            {% if app.user.street %}
+                            <dl class="item-property col-12">
+                                <dt>{{ 'Calle' }}</dt>
+                                <dd>{{ app.user.street }}</dd>
+                            </dl>
+
+                            <dl class="item-property col-6">
+                                <dt>{{ 'general.zip' | trans }}</dt>
+                                <dd>{{ app.user.zip }}</dd>
+                            </dl>
+
+                            <dl class="item-property col-6">
+                                <dt>{{ 'Ciudad' }}</dt>
+                                <dd>{{ app.user.city }}</dd>
+                            </dl>
+
+                            <dl class="item-property col-6">
+                                <dt>{{ 'País' }}</dt>
+                                <dd>{{ app.user.countryCode | country }}</dd>
+                            </dl> 
+                            {% endif %}
+
+                        </div>
+
+                        {# <div>
+                            {% include 'account/partial/social_buttons.html.twig' with {'connect': true, 'blacklist': blacklist, 'route': 'app_auth_oauth_connect'} %}
+                        </div> #}
+                    </div>
+
+                </div>
+
+               {# <div class="card mt-5">
+                    <div class="card-header">
+                        <strong>{{ 'general.marketing' | trans }}</strong>
+                    </div>
+
+                    <div class="card-body">
+                        <form name="marketing_form" method="post" action="{{ path('account-update-marketing-permission') }}">
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="marketing_form_newsletter" name="newsletter" class="custom-control-input" value="1" {{ app.user.newsletter.consent ? 'CHECKED="CHECKED"' : '' }}>
+                                    <label class="checkbox-custom custom-control-label" for="marketing_form_newsletter">{{ 'general.newsletter' | trans }}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="marketing_form_profiling" name="profiling" class="custom-control-input" value="1" {{ app.user.profiling.consent ? 'CHECKED="CHECKED"' : '' }}>
+                                    <label class="checkbox-custom custom-control-label" for="marketing_form_profiling">{{ 'general.profiling' | trans }}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" id="marketing_form__submit" class="btn btn-sm btn-block btn-success btn">
+                                    {{ 'general.update' | trans }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div> #}
+
+
+
+
+            </div>
+
+            {% if orderList.count > 0 %}
+
+                <div class="col-12 col-md-6">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>{{ 'Mis pedidos' }}</strong>
+                        </div>
+
+                        <div class="card-body">
+
+                            {% for orderItem in orderList %}
+
+                                {% set order = orderItem.reference %}
+
+
+
+
+                                <div class="media mb-4">
+                                    <div class="mr-3"><i class="fa fa-shopping-cart"></i></div>
+                                    <div class="media-body">
+                                        <small class="text-muted">
+                                            {{ order.orderdate }}
+                                        </small>
+
+                                        <h6> {{ 'Pedido: ' }} {{ order.ordernumber }} </h6>
+
+                                        <dl class="item-property">
+                                            <dt>{{ 'Artículos' }}</dt>
+                                            <dd>
+                                                {% for orderItem in order.items %}
+                                                    <div>
+                                                        {{ orderItem.productName }} ({{ orderItem.productNumber }})
+                                                        <span class="float-right">{{ orderItem.totalPrice | currency }}</span>
+                                                    </div>
+                                                {% endfor %}
+                                            </dd>
+                                        </dl>
+
+                                        {% if order.priceModifications %}
+                                            <dl class="item-property">
+                                                <dt>{{ 'Adiciones' }}</dt>
+                                                <dd>
+                                                    {% for priceModification in order.priceModifications %}
+                                                        <div>
+                                                            {{ priceModification.name }}
+                                                            <span class="float-right">{{ priceModification.amount | currency }}</span>
+                                                        </div>
+                                                    {% endfor %}
+                                                </dd>
+                                            </dl>
+                                        {% endif %}
+
+                                        {% if order.giftItems %}
+                                            <dl class="item-property">
+                                                <dt>{{ 'general.giftItems' | trans }}</dt>
+                                                <dd>
+                                                    {% for orderItem in order.giftItems %}
+                                                        <div>
+                                                            {{ orderItem.productName }} ({{ orderItem.productNumber }})
+                                                        </div>
+                                                    {% endfor %}
+                                                </dd>
+                                            </dl>
+                                        {% endif %}
+
+                                        <dl class="item-property">
+                                            <dd>
+                                                <strong>
+                                                    {{ 'Total:' }}
+                                                    <span class="float-right">{{ order.totalPrice | currency }}</span>
+                                                </strong>
+                                            </dd>
+                                        </dl>
+
+
+
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>
+
+            {% endif %}
+        </div>
+
+
+
+    </div>
+</div>
+{% endblock %}
+

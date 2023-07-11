@@ -1,0 +1,55 @@
+{% set productPriceBlock = pimcore_block('product-price') %}
+{% set id = uniqid('product-price-') %}
+
+<section class="pricing section-bg" data-aos="fade-up">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>{{ pimcore_input("price_title", { 'placeholder':'Título de precio' }).render()|raw }}</h2>
+          <p>{{ pimcore_input("description", { 'placeholder':'Agrega una descripción' }).render()|raw }}</p>
+        </div>
+        <div class="row no-gutters">
+            {% if editmode %}
+            <p class="float-left">{{ 'Seleccione el número de tipos de suscripción:' }}<p>
+            {% endif %}
+            {% for i in pimcore_iterate_block(productPriceBlock) %}
+            {% set headerId = 'heading' ~ i %}
+            {% set entryId = id ~ '-' ~ productPriceBlock.getCurrent() %}
+            {% set stateClass = (editmode or (productPriceBlock.getCurrent() == 0)) ? 'show' %}
+          {# Cajas tipos de suscripción #}
+
+          {% if editmode %}
+              <div class="col-lg-12 box featured">
+          {% else %}
+                {% if i % 3 == 0 %}
+                    <div class="col-lg-4 box featured">
+                {% else %}
+                    <div class="col-lg-4 box">
+                {% endif %}
+          {% endif %}
+
+            <h3>{{ pimcore_input("suscription_type", { 'placeholder':'Nombre de Tipo suscripción          .' }).render()|raw }}</h3>
+            <h4>{{ pimcore_input("price", { 'placeholder':'$0' }).render()|raw }}<span>{{ pimcore_input("time", { 'placeholder':'Por mes' }).render()|raw }}</span></h4>
+            <ul>
+          {% if editmode %}
+            <p class="float-left">{{ '¿Cuántas características incluye?:' }}</p>
+          {% endif %}
+            {% for i in pimcore_iterate_block(pimcore_block('feature')) %}
+              <li><i class="bx bx-check"></i>{{ pimcore_input("include", { 'placeholder':'Incluye' }).render()|raw }}</li>
+            {% endfor %}
+          {% if editmode %}
+            <p class="float-left">{{ '¿Cuántas características no incluye?:' }}</p>
+          {% endif %}
+            {% for i in pimcore_iterate_block(pimcore_block('d_include')) %}
+              <li class="na"><i class="bx bx-x"></i> <span>{{ pimcore_input("price7", { 'placeholder':'no incluye' }).render()|raw }}</span></li>
+            {% endfor %}
+            </ul>
+            {{ pimcore_link('start', {'class': "get-started-btn"}).render()|raw }}
+          </div>
+
+{% endfor %}
+        </div>
+      </div>
+</section>
+
+

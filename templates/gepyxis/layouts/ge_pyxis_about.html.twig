@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{% if product is defined and product is not null %}
+  <meta name="description" content='{{ product.getShortDescription() }}'>
+{% endif %}
+
+
+<!-- Favicons -->
+<link href="assets/img/icono.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+
+  {% apply spaceless %}
+            {# add global stylesheets and scripts outside of any blocsk to add them to the helpers before any others assets are added #}
+            {# we use the view helper to have cache buster functionality #}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/animate.css/animate.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/aos/aos.css'), 'screen') %}
+                        {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap/css/bootstrap.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/bootstrap-icons/bootstrap-icons.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/boxicons/css/boxicons.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/glightbox/css/glightbox.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/vendor/swiper/swiper-bundle.min.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('assets/css/style.css')) %}
+            {% do pimcore_head_link().appendStylesheet('https://fonts.googleapis.com/css?family=Hind+Guntur:300,400,500,600,700&display=swap') %}
+            {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.9.0/css/all.css') %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/lib/magnific/magnific.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/lib/autocompletejs/css/autoComplete.css'), 'screen') %}
+            {% do pimcore_head_link().appendStylesheet('https://use.fontawesome.com/releases/v5.7.0/css/all.css',null,null,{integrity:'sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ',crossorigin:'anonymous'}) %}
+            {% do pimcore_head_link().appendStylesheet(asset('static/css/global.css')) %}
+            {% if editmode %}
+                {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+            {% endif %}
+            {% do pimcore_head_script().appendFile('https://code.jquery.com/jquery-3.3.1.slim.min.js',null,null,{ integrity:"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js',null,null,{ integrity:"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1",crossorigin:"anonymous"}) %}
+            {% do pimcore_head_script().appendFile(asset('static/lib/magnific/magnific.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/lib/autocompletejs/js/autoComplete.min.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/js/search-autocomplete.js')) %}
+            {% do pimcore_head_script().appendFile(asset('static/js/main.js')) %}
+            
+            {% if not editmode %}
+                    {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+            {% endif %}
+
+            {% if not document is defined or not document %}
+                {% set document = pimcore_document(1) %}
+            {% endif %}
+
+            {% if document is instanceof('\\Pimcore\\Model\\Document\\Link') %}
+                {# @var document \Pimcore\Model\Document\Link #}
+                {% set document = document.getObject() %}
+            {% endif %}
+
+            {% if document is instanceof('\\Pimcore\\Model\\Document\\Page') %}
+                {% if document.getTitle() is not empty %}
+                    {% do pimcore_head_title().set(document.getTitle()) %}
+                {% endif %}
+
+                {% if document.getDescription() is not empty %}
+                    {% do pimcore_head_meta().setDescription(document.getDescription()) %}
+                {% endif %}
+
+                {% do pimcore_head_title().append('Gepyxis') %}
+                {% do pimcore_head_title().setSeparator(' - ') %}
+            {% endif %}
+
+            {% set isPortal = ((isPortal is defined) and isPortal) %}
+        {% endapply %}
+
+        {# we're using the deferred extension here to make sure this block is rendered after all helper calls #}
+        {% block layout_head_meta deferred %}
+            {{ pimcore_head_title() }}
+            {{ pimcore_head_meta() }}
+
+            {% if pimcore_placeholder('canonical').count() %}
+                <link rel="canonical" href="{{ pimcore_placeholder('canonical') }}"/>
+            {% endif %}
+
+        {% endblock %}
+
+        {% block head_stylesheets deferred %}
+            {{ pimcore_head_link() }}
+        {% endblock %}
+
+{% if product is defined and product is not null %}
+
+  <!-- ======= Etiquetas Open Graphic ======= -->
+    <meta property="og:title" content={{ product.oSName }}>
+    <meta property="og:type" content="product">
+    <meta property="og:description" content='{{ product.getShortDescription() }}'>
+    {% if product.getOgImage()  %}
+    <meta property="og:image" content={{ product.getOgImage() }}>
+    {% else %} 
+    <meta property="og:image" content={{ product.getLogo() }}>
+    {% endif %}
+
+{% endif %}
+
+</head>
+
+<body>
+
+  {% include "gepyxis/includes/header.html.twig" %}
+
+    <main id="main">
+    <!-- ======= About Section ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>{{ pimcore_input("head_abo_nam", {'placeholder':'Título'}).render()|raw }}</h2>
+          <ol>
+            <li><a href="{{pimcore_document(204)}}">Home</a></li>
+            <li>¿Quiénes somos?</li>
+          </ol>
+        </div>
+      </div>
+    </section><!-- End About Section -->
+
+    <section class="alazea-portfolio-area portfolio-page section-padding-0-100 bg-gray" data-aos="fade-up">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Section Heading -->
+                    <h2 style="color:#FF8000; font-family:Tahoma; text-align:center; size: 25px;">{{ pimcore_input("our_skills", {'placeholder':'Título'}).render()|raw }}</h2>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container">
+            <div class="row alazea-portfolio2">
+                <!-- Single Portfolio Area -->
+                <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item2 design home-design">
+                    <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/fondo2.jpg);opacity: 0.9; filter: alpha(opacity=30); border-style: inset;">
+                        <div>
+                            <a>
+                                <div class="port-hover-text" style="text-align:center;">
+                                    <br><br><br>
+                                    <h3 style="font-family: Tahoma; color:#D7DF01;">{{ pimcore_input("skill_01", {'placeholder':'Habilidad 1'}).render()|raw }}</h3>
+                                    <p style="font-family: Tahoma; color:black;">{{ pimcore_input("skill_desc_01", {'placeholder':'Descripción Habilidad 1'}).render()|raw }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item2 design home-design">
+                    <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/fondo2.jpg);opacity: 0.9; filter: alpha(opacity=30); border-style: inset;">
+                        <div>
+                            <a>
+                                <div class="port-hover-text" style="text-align:center;">
+                                    <br><br><br>
+                                    <h3 style="font-family: Tahoma; color: #D7DF01;">{{ pimcore_input("skill_02", {'placeholder':'Habilidad 2'}).render()|raw }}</h3>
+                                    <p style="font-family: Tahoma; color: black;">{{ pimcore_input("skill_desc_02", {'placeholder':'Descripción Habilidad 2'}).render()|raw }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item2 design home-design">
+                    <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/fondo2.jpg);opacity: 0.9; filter: alpha(opacity=30); border-style: inset;">
+                        <div>
+                                <a>
+                                    <div class="port-hover-text" style="text-align:center;">
+                                        <br><br><br>
+                                        <h3 style="font-family: Tahoma; color:#D7DF01">{{ pimcore_input("skill_03", {'placeholder':'Habilidad 3'}).render()|raw }}</h3>
+                                        <p style="font-family: Tahoma; color:black;">{{ pimcore_input("skill_desc_03", {'placeholder':'Descripción Habilidad 3'}).render()|raw }}</p>
+                                    </div>
+                                </a>
+                            </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3 single_portfolio_item2 design home-design">
+                    <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/fondo2.jpg);opacity: 0.9; filter: alpha(opacity=30); border-style: inset; ">
+                        <div>
+                            <a>
+                                <div class="port-hover-text" style="text-align:center;">
+                                    <br><br><br>
+                                    <h3 style="font-family: Tahoma; color:#D7DF01;">{{ pimcore_input("skill_04", {'placeholder':'Habilidad 4'}).render()|raw }}</h3>
+                                    <p style="font-family: Tahoma; color:black;">{{ pimcore_input("skill_desc_04", {'placeholder':'Descripción Habilidad 1'}).render()|raw }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="our-services-area bg-gray section-padding-100-0" style="background-image: url(../static/assets/img/team/aboutUs.png);" data-aos="fade-up">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="single_portfolio_item2 home-design wow fadeInUp" data-wow-delay="300ms" style="visibility: visible; animation-delay: 300ms; animation-name: fadeInUp;">
+                        <!-- Portfolio Thumbnail -->
+                        <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/mov.svg);"></div>
+                        <!-- Portfolio Hover Text -->
+                        <div class="portfolio-thumbnail2 bg-img" style="background-image: url(../static/assets/img//backgroundWhite.jpg);opacity: 0.7; filter: alpha(opacity=80); border-style: inset;">
+                            <a class=" d-flex align-items-center justify-content-center">
+                                <div class="port-hover-text">
+                                    <center><h3 style="font-family: Tahoma; color:#FF8000; font-size: 30px;"><br>{{ pimcore_input("mission").render()|raw }}</h3><br></center>
+                                    <center><h4 style="font-family:Calibri Light; font-size: 18px; color:black; text-align:justify-all;">
+                                            {{ pimcore_input("mission_desc", {'placeholder':'Misión'}).render()|raw }}
+                                    </h4></center><br>                              
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="single_portfolio_item2 home-design wow fadeInUp" data-wow-delay="300ms" style="visibility: visible; animation-delay: 300ms; animation-name: fadeInUp;">
+                        <!-- Portfolio Thumbnail -->
+                        <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/mov.svg);"></div>
+                        <!-- Portfolio Hover Text -->
+                        <div class="portfolio-thumbnail2 bg-img" style="background-image: url(../static/assets/img//backgroundWhite.jpg);opacity: 0.7; filter: alpha(opacity=80); border-style: inset;">
+                            <a class=" d-flex align-items-center justify-content-center">
+                                <div class="port-hover-text">
+                                    <center><h3 style="font-family: Tahoma; color:#FF8000; font-size: 30px;"><br>{{ pimcore_input("vision").render()|raw }}</h3></center>
+                                    <center><h4 style="font-family:Calibri Light; font-size: 18px; color:black; text-align:justify-all;">
+                                            {{ pimcore_input("vision_desc", {'placeholder':'Visión'}).render()|raw }}</h4>
+                                    </center><br>                              
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="single_portfolio_item2 home-design wow fadeInUp" data-wow-delay="300ms" style="visibility: visible; animation-delay: 300ms; animation-name: fadeInUp;">
+                        <!-- Portfolio Thumbnail -->
+                        <div class="portfolio-thumbnail2 bg-img" style="background-image: url(img/mov.svg);"></div>
+                        
+                        <!-- Portfolio Hover Text -->
+                        <div class="portfolio-thumbnail2 bg-img" style="background-image: url(../static/assets/img//backgroundWhite.jpg);opacity: 0.7; filter: alpha(opacity=80); border-style: inset;">
+                            <a class=" d-flex align-items-center justify-content-center">
+                                <div class="port-hover-text">
+                                    <center><h3 style="font-family: Tahoma; color:#FF8000; font-size: 30px;"><br>{{ pimcore_input("values").render()|raw }}</h3><br></center>
+                                    <center><h4 style="font-family:Calibri Light; font-size: 18px; color:black; text-align:justify-all;">
+                                            {{ pimcore_input("values_desc", {'placeholder':'Valores'}).render()|raw }}</h4></center><br>                              
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-heading ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section><br><br>
+    
+
+    {# {{ include('includes/hero-carousel.html.twig') }} #}
+    {# {{ include('includes/customer-carousel.html.twig') }} #}
+    {# {{ block('content') }} #}
+
+    {{ block('content') }}
+
+
+            <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Clic para volver arriba" data-toggle="tooltip" data-placement="left">
+                <span class="fa fa-arrow-up"></span>
+            </a>
+
+        </main>
+
+
+
+        {# include a document-snippet - in this case the footer document #}
+        {{ pimcore_inc(document.getProperty('footerGP')) }}
+
+        {# output scripts added before #}
+        {% block headscripts deferred %}
+            {{ pimcore_head_script() }}
+        {% endblock %}
+
+
+        {% block inlinescripts deferred %}
+            {{ pimcore_inline_script() }}
+        {% endblock %}
+
+  <!-- Vendor JS Files -->
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/purecounter/purecounter_vanilla.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/aos/aos.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/glightbox/js/glightbox.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/isotope-layout/isotope.pkgd.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/swiper/swiper-bundle.min.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/waypoints/noframework.waypoints.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/vendor/php-email-form/validate.js')) %}
+  {% do pimcore_head_script().appendFile(asset('assets/js/main.js')) %}
+
+</body>
+
+</html>

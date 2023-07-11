@@ -1,0 +1,23 @@
+{% set col = app.request.get('editmode') ? 12 : 3 %}
+{% set detailLink = app_product_detaillink(product) %}
+        <div class="col-md-4 d-flex center-block align-items-stretch aos-init aos-animate" data-aos="fade-up">
+            <div class="card">
+                <div class="card-img">
+                    <img src={{ product.getLogo() }}>
+                </div>
+              <div class="card-body">
+                <h5 class="card-title"><a href="{{ product.document ? product.document : "#" }}">
+                    {% if product is defined and product.getName() is defined %}
+                        {{ product.getName() }}
+                    {% elseif product is defined and product.getNombre() is defined %}
+                        {{ product.getNombre() }}
+                    {% else %}
+                        Producto sin nombre
+                    {% endif %}
+                </a></h5>
+                <p class="card-text">{{ product.getShortDescription() }}</p>
+                    <div class="read-more"><a href="{{ product.document ? product.document : "#" }}"><i class="bi bi-arrow-right"></i>Ver más</a>
+                    </div>
+              </div>
+            </div>
+        </div>

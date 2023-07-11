@@ -1,0 +1,24 @@
+{% set whyUsBlock = pimcore_block('block') %}
+<!-- ======= Why Us Section ======= -->
+<section class="why-us section-bg" data-aos="fade-up" date-aos-delay="200">
+    <div class="container">
+
+    <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center p-5">
+                {{ pimcore_video('campaignVideo22') }}
+        </div>
+
+        <div class="col-lg-6 d-flex flex-column justify-content-center p-5">
+            {% for i in pimcore_iterate_block(featuretteBlock) %}
+            <div class="icon-box">
+                <div class="icon"><i class="bx bx-fingerprint"></i></div>
+                <h4 class="title"><a href="">{{ pimcore_input("subtitle_22").render()|raw }}</a></h4>
+                <p class="description">{{ pimcore_input("description_32").render()|raw }}</p>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    </div>
+</section><!-- End Why Us Section -->

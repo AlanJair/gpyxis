@@ -1,0 +1,18 @@
+<section class="service-details">
+      <div class="container">
+      <h2>{{ pimcore_input('gepyxisProductTeaserTitle', {'placeholder':'Insertar título'}) }}</h2>
+        <div class="row">
+            {% if editmode %}
+                <p>Se recomienda agregar al menos 3 soluciones o servicios</p>
+            {% endif %}
+                    {% for i in pimcore_block('teaserblock').iterator %}
+                        {{ pimcore_renderlet('productteaser', {
+                            controller: 'App\\Controller\\ProductController::productCellAction',
+                            title: 'Arrastra una solución o servicio aquí',
+                            editmode: editmode
+                        }) }}
+                    {% endfor %}
+          </div>
+      </div>
+</section>
+

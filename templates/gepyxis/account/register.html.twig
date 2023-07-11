@@ -1,0 +1,33 @@
+{% extends 'gepyxis/layouts/layout.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+
+{% block content %}
+<section class="contact aos-init aos-animate" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+    <div class="container php-email-form">
+
+
+        <div class="mb-5 d-flex justify-content-center">
+            <div class="col-12 col-md-6">
+
+            {% if errors %}
+                {% for error in errors %}
+                    <div class="alert alert-danger">
+                        {{ error | raw }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <h1 class="display-3 mb-3 font-weight-normal">{{ 'Registrarse' }}</h1>
+
+            {{ form(form) }}
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+

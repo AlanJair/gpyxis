@@ -1,0 +1,33 @@
+<section class="breadcrumbs">
+    <div class="container">
+
+    {% set navStartNode = document.getProperty('navigation_root') %}
+    {% if not navStartNode is instanceof('\\Pimcore\\Model\\Document\\Page')  %}
+        {% if pimcore_site_is_request() %}
+            {% set site = pimcore_site_current() %}
+            {% set navStartNode = site.getRootDocument() %}
+        {% else %}
+            {% set navStartNode = pimcore_document(214) %}
+        {% endif %}
+    {% endif %}
+
+    {% set mainNavigation = pimcore_build_nav({active: document, root: navStartNode}) %}
+    {% set menuRenderer = pimcore_nav_renderer('menu') %}
+
+    <div class="d-flex justify-content-between align-items-center">
+        {% if project is defined %}
+            <h2>{{ project.titulo|striptags }}</h2>
+        {% else %}
+            <h2>{{ pimcore_input("head_nam", {'placeholder':'Título'}).render()|raw }}</h2>
+        {% endif %}
+        <ol>
+        {% for page in mainNavigation %}
+            {% if page.isVisible() and menuRenderer.accept(page) %}
+                <li><a href="{{ page.getHref() }}">{{ page.getLabel() }}</a></li>
+            {% endif %}
+        {% endfor %}
+        </ol>
+    </div>
+
+    </div>
+</section>

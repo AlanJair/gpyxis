@@ -1,0 +1,134 @@
+{% if editmode %}
+    {% do pimcore_head_link().appendStylesheet(asset('static/css/editmode.css')) %}
+{% endif %}
+{% if not editmode %}
+    {% do pimcore_head_script().appendFile(asset('static/js/frontend.js')) %}
+{% endif %}
+{{ pimcore_head_link() }}
+<style type="text/css">
+    .search-project{
+        position: relative;
+        width: 100%;
+        height: 60px;
+        background: #fff;
+        border-radius: 60px;
+        transition: 0.5s;
+        box-shadow: 0 0 0 5px #1976D2;
+         overflow: hidden; 
+    }
+
+    .search-project .icon-search-project{
+        position: absolute;
+        top: 0;
+        Left: 0;
+        width: 40px;
+        height: 60px;
+        background: #fff;
+        border-radius: 60px 0 0 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .search-project .icon-search-project::before{
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #1976D2;
+        border-radius: 50%;
+        transform: translate(2px, -3px);
+    }
+
+    .search-project .icon-search-project::after{
+        content: '';
+        position: absolute;
+        width: 3px;
+        height: 10px;
+        background: #1976D2;
+        transform: translate(12px, 7px) rotate(315deg);
+    }
+
+    .search-project .input-search-project{
+        position: relative;
+        width: 93%;
+        height: 60px;
+        Left: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-project .input-search-project input{
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: navajowhite;
+        font-size: 18px;
+        padding: 10px 0;
+    }
+</style>
+{% set showBgSectionBar = pimcore_checkbox('showBgSectionBar', {
+    reload: true
+}) %}
+{# RECORDAR PASAR SECTION Y CONTAINER A LA PAGINA PADRE si se ocupa como propiedad#}
+{% if editmode %}
+    <div class="alert alert-secondary col-xs-12" style="height: 75px">
+        <div class="d-inline ml-5">
+            <span class="editmode-label align-middle">Conservar fondo blanco</span>
+            {{ showBgSectionBar|raw }}
+        </div>
+    </div>
+{% endif %}
+<section {{ pimcore_checkbox("showBgSectionBar").isChecked()  ? 'class="services"':'class="services section-bg"' }}>
+    <div class="container">
+        <div class="row">
+
+            <form method="get" class="search-project">
+                <div class="icon-search-project"></div>
+                <div class="input-search-project">
+                    <input id="inputSearch" name="search" value="{{ app.request.get("search") }}"  type="search" placeholder="Buscar" >
+                </div>
+                {# <button id="btn-search" class="btn btn-outline-success" type="submit">Buscar</button> #}  
+            </form>
+
+        </div>
+    </div>
+</section>
+{{ pimcore_head_script() }}
+ <script type="module">
+    const inputSearch = document.getElementById("inputSearch");
+
+    {# const icon = document.querySelector('.icon');
+    const search = document.querySelector('.search-project'); #}
+
+    {# function mostrar_buscador(){
+      bars_search.style.top = "80px";
+      cover_ctn_search.style.display = "block";
+      inputSearch.focus();
+      if(inputSearch.value === ""){
+            box_search.style.display = "none";
+          }
+    }
+
+    function ocultar_buscador(){
+      bars_search.style.top = "-10px";
+      cover_ctn_search.style.display = "none";
+      inputSearch.value = "";
+      box_search.style.display = "none";
+    } #}
+    
+
+    // Filtrado de busqueda
+    {# function buscar(){
+      var filter = inputSearch.value.toUpperCase();
+      location.href = 'http://pimcore_demo01.gr/es/Proyectos/Servicios/' + filter;
+
+
+    }
+    document.getElementById("btn-search").addEventListener("click", buscar); #}
+  </script>
